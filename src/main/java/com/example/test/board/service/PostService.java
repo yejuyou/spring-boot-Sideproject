@@ -58,7 +58,7 @@ public class PostService {
           post.changeTitle(postDTO.getTitle());
           post.changeContents(postDTO.getContents());
 
-          return PostDTO.builder()
+        return PostDTO.builder()
                   .id(post.getId())
                   .build();
     }
