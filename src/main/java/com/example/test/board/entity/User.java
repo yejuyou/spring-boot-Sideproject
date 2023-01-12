@@ -37,7 +37,8 @@ public class User implements UserDetails {
     @Builder.Default
     private boolean enabled = true;
 
-
+    public User(String subject, String s, Collection<? extends GrantedAuthority> authorities) {
+    }
 
 
     public void encryptPassword(String password) {

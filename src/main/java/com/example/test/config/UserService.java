@@ -1,6 +1,5 @@
 package com.example.test.config;
 
-import com.example.test.board.dto.UserDTO;
 import com.example.test.board.entity.User;
 import com.example.test.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
-    public User createUser(UserDTO userDTO) {
+    public User createUser(User userDTO) {
         User user = User.builder().email(userDTO.getEmail()).nickName(userDTO.getNickName()).creatdBy(LocalDateTime.now()).enabled(true).build();
         user.encryptPassword(userDTO.getPassword());
         return userRepository.save(user);
@@ -32,4 +31,5 @@ public class UserService implements UserDetailsService {
         log.debug(String.valueOf(user.isEnabled()));
         return User.builder().email(user.getEmail()).password(user.getPassword()).nickName(user.getNickName()).authority(user.getRole()).enabled(user.isEnabled()).build();
     }
+
 }

@@ -1,7 +1,20 @@
 
+
+
+###로그인
+POST {{host}}/login
+Content-Type: application/json
+
+{
+  "email": "adminTest1@naver.com",
+  "password": "password"
+}
+> {% client.global.set("auth_token", response.body.payload.token); %}
+
 ###게시판 아이디조회
-GET {{host}}/post/3
+GET {{host}}/post/4
+Authorization: Bearer {{auth_token}}
 
 ###게시판 등록
 POST {{host}}/post/2/title/content/
-
+Authorization: Bearer {{auth_token}}

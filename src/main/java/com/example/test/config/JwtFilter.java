@@ -16,10 +16,17 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @Slf4j
+//jwt를 위한 커스텀 필터를 만들기 위해 JwtFilter 클래스 생성
+/***
+ * JwtFilter는 방금전에 만들었던 TokenProvider를 주입받는다.
+ * 필터링을 하기위해서 토큰 정보가 있어야하기 때문에 resolveToken 메소드를 추가
+ * resolveToken 메소드에서는 Request Header에서 토큰 정보를 꺼내오기 위한 resolveToken 메소드 추가
+ */
 public class JwtFilter extends GenericFilterBean {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private final TokenProvider tokenProvider;
 
+    //doFilter 메소드의 역할 : jwt 토큰의 인증정보를 현재 실행중인 SecurityContext에 저장하는 역할 수행
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException, ServletException, IOException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;

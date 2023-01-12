@@ -32,19 +32,22 @@ public class TokenProvider implements InitializingBean {
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
     }
 
+
+    //afterPropertiesSet()을 Override한 이유는 Bean이 생성되고 의존성 주입까지 끝낸 후 주입 받은 secret값을 base64 decode하여 key 변수에 할당하기 위함이다.
     @Override
     public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
+    // Authentication 객체에 포함되어 있는 권한 정보들을 담은 토큰을 생성하고 jwt.token-validity-in-seconds 값을 이용해 토큰의 만료 시간을 지정
     public String createToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.tokenValidityInMilliseconds);
         return Jwts.builder().setSubject(authentication.getName()).claim(AUTHORITIES_KEY, authorities).signWith(key, SignatureAlgorithm.HS512).setExpiration(validity).compact();
     }
-
+    // getAuthentication 메소드는 토큰에 담겨있는 권한 정보들을 이용해 Authentication 객체를 리턴합니다.
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         Collection<? extends GrantedAuthority> authorities =
@@ -57,6 +60,8 @@ public class TokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
+
+    //validateToken 메소드는 토큰을 검증하는 역할을 수행합니다.
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
