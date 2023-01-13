@@ -20,9 +20,9 @@ public class TestUser {
     @Test
     public void addUser() {
         final User user = User.builder()
-                .email("adminTest1@naver.com")
+                .email("adminTest3@naver.com")
                 .password("password")
-                .nickName("admin")
+                .nickName("admin3")
                 .build();
 
         final User result = userService.createUser(user);

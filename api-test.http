@@ -8,11 +8,12 @@ Content-Type: application/json
 {
   "email": "adminTest1@naver.com",
   "password": "password"
+
 }
-> {% client.global.set("auth_token", response.body.payload.token); %}
+> {% client.global.set("auth_token", response.body.data.token); %}
 
 ###게시판 아이디조회
-GET {{host}}/post/4
+GET {{host}}/post/7
 Authorization: Bearer {{auth_token}}
 
 ###게시판 등록
