@@ -2,6 +2,7 @@ package com.example.test.board.service;
 
 import com.example.test.board.dto.PostDTO;
 import com.example.test.board.entity.Post;
+import com.example.test.board.repository.PostCategoryRepository;
 import com.example.test.board.repository.PostRepository;
 import com.example.test.util.custom_exception.PostNotFound;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,8 @@ import java.util.Optional;
 public class PostService {
 
     private final PostRepository postRepository;
+
+    private final PostCategoryRepository postCategoryRepository;
 
     public PostDTO getPost(Long postId) {
         Optional<Post> byId = postRepository.findById(postId);
@@ -38,6 +41,7 @@ public class PostService {
         Post post = Post.builder()
                 .title(postDTO.getTitle())
                 .contents(postDTO.getContents())
+                .category(postCategoryRepository.findByName(postDTO.getCategory()))
                 .createAt(LocalDateTime.now())
                 .build();
 
@@ -69,4 +73,5 @@ public class PostService {
         Post post =byId.orElseThrow(()->new PostNotFound("해당 포스트가 존재하지 않습니다."));
          postRepository.delete(post);
     }
+
 }

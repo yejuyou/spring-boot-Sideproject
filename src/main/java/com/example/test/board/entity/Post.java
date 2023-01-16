@@ -3,10 +3,7 @@ package com.example.test.board.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,6 +19,11 @@ public class Post {
     private String contents;
     private LocalDateTime createAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_category_id")
+    private PostCategory category;
+
+
 
     public void changeTitle(String title) {
         this.title = title;
@@ -30,5 +32,13 @@ public class Post {
     public void changeContents(String contents) {
         this.contents = contents;
     }
+
+
+    public void MappingCategory(PostCategory postCategory){
+        this.category =postCategory;
+        postCategory.mappingPost(this);
+    }
+
+
 
 }
